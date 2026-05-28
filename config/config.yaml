@@ -1,0 +1,92 @@
+# ─────────────────────────────────────────────
+#  Loan Default Prediction — Configuration
+# ─────────────────────────────────────────────
+
+paths:
+  raw_data:        data/loan_data.csv
+  processed_data:  outputs/processed_data.csv
+  models_dir:      outputs/models/
+  plots_dir:       outputs/plots/
+
+data:
+  target_column:   Defaulter
+  test_size:       0.2
+  random_state:    42
+  smote_strategy:  0.5          # ratio of minority to majority after SMOTE
+  drop_columns:    [user_id]
+
+  # Columns requiring label encoding
+  categorical_columns:
+    - loan_category
+    - employment_type
+
+  # Columns to check for skewness (log-transform if skew > threshold)
+  numeric_columns:
+    - loan_amount
+    - annual_income
+    - loan_to_income_ratio
+
+  skew_threshold:  1.0
+
+xgboost:
+  # Default params (overridden by Hyperopt tuning)
+  n_estimators:    300
+  max_depth:       6
+  learning_rate:   0.05
+  subsample:       0.8
+  colsample_bytree: 0.8
+  use_label_encoder: false
+  eval_metric:     logloss
+  random_state:    42
+
+  hyperopt:
+    max_evals:     50
+    space:
+      max_depth:        [3, 10]
+      learning_rate:    [0.01, 0.3]
+      n_estimators:     [100, 500]
+      subsample:        [0.6, 1.0]
+      colsample_bytree: [0.6, 1.0]
+
+random_forest:
+  # Default params (overridden by GridSearch)
+  n_estimators:    200
+  max_depth:       null          # null = unlimited
+  min_samples_split: 2
+  random_state:    42
+
+  grid_search:
+    cv_folds: 5
+    scoring:  f1
+    n_jobs:   -1
+    param_grid:
+      n_estimators:      [100, 200, 300]
+      max_depth:         [null, 5, 10, 15]
+      min_samples_split: [2, 5, 10]
+
+evaluation:
+  threshold:       0.5           # decision threshold for classification
+  pos_label:       1             # label that represents "defaulter"
+
+explainability:
+  shap:
+    background_samples: 100      # samples for SHAP explainer background
+    max_display:        15       # features to show in summary plot
+    dependence_features:
+      - credit_score
+      - loan_to_income_ratio
+      - interest_rate
+
+  anchors:
+    threshold:     0.95          # minimum precision for anchor rule
+    sample_index:  5             # which test sample to explain
+
+  counterfactuals:
+    num_cfs:       5             # how many counterfactuals to generate
+    desired_class: 0             # flip to: 0 = No Default
+    sample_index:  5
+
+neptune:
+  enabled:         false         # set to true and add API token to use
+  project:         "your-workspace/loan-default"
+  api_token:       ""

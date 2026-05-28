@@ -1,0 +1,36 @@
+# ─────────────────────────────────────────────────────────────────
+#  Loan Default Prediction — Requirements
+#  Compatible with Python 3.10, 3.11, 3.12, 3.13 on Windows/Mac/Linux
+#  Uses minimum-version bounds so pip picks the best available wheel.
+# ─────────────────────────────────────────────────────────────────
+
+# Core data
+pandas>=2.2.0
+numpy>=2.0.0
+
+# Machine learning
+scikit-learn>=1.5.0
+xgboost>=2.1.0
+imbalanced-learn>=0.12.0
+
+# Hyperparameter tuning
+hyperopt>=0.2.7
+
+# Explainability (core)
+shap>=0.45.0
+
+# Visualisation
+matplotlib>=3.9.0
+seaborn>=0.13.2
+
+# Utilities
+pyyaml>=6.0.1
+joblib>=1.4.0
+tqdm>=4.66.0
+scipy>=1.13.0
+
+# ─── Optional — install for full XAI support ──────────────────────
+# pip install alibi>=0.9.4          (Anchors)
+# pip install dice-ml>=0.11         (Counterfactuals)
+# pip install deepchecks>=0.18.0    (Model validation)
+# pip install neptune-client>=1.8.6 (Experiment tracking)
