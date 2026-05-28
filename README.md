@@ -1,4 +1,4 @@
-# Loan Default Prediction — Explainable AI
+# Loan Prediction
 
 > Predicting loan defaults with XGBoost & Random Forest, then explaining *why* every prediction was made using SHAP, Anchors, and Counterfactuals.
 
